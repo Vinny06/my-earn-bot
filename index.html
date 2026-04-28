@@ -1,159 +1,1172 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Elite Cric Earn | Global</title>
-    <script src="https://static.adsgram.ai/js/sdk.js"></script>
-    <style>
-        :root {
-            --primary: #00f2fe;
-            --secondary: #4facfe;
-            --bg: #0b0e14;
-            --card-bg: rgba(25, 30, 40, 0.95);
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Elite Cric Earn</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #F4C252;
+    --gold-soft: #F9D98A;
+    --gold-dim: rgba(244,194,82,0.12);
+    --green: #2ECC71;
+    --green-dim: rgba(46,204,113,0.12);
+    --red: #E74C3C;
+    --bg: #080B10;
+    --bg2: #0E1219;
+    --bg3: #141A24;
+    --bg4: #1C2433;
+    --border: rgba(255,255,255,0.06);
+    --border2: rgba(255,255,255,0.10);
+    --text: #F0F4FF;
+    --muted: #7B8799;
+    --accent: #00C6FF;
+    --accent2: #0072FF;
+    --font-head: 'Syne', sans-serif;
+    --font-body: 'DM Sans', sans-serif;
+    --radius: 20px;
+    --radius-sm: 12px;
+  }
 
-        body { 
-            background: var(--bg); color: white; font-family: 'Segoe UI', sans-serif; 
-            margin: 0; padding: 0; display: flex; justify-content: center;
-        }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
-        /* Responsive Wrapper: Centers content on Laptop, Full width on Mobile */
-        .app-container {
-            width: 100%;
-            max-width: 500px; /* Limits width on Laptop */
-            min-height: 100vh;
-            background: var(--bg);
-            position: relative;
-            box-shadow: 0 0 50px rgba(0,0,0,0.5);
-            display: flex;
-            flex-direction: column;
-        }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
 
-        .header { padding: 25px; text-align: center; font-weight: 900; font-size: 24px; color: var(--primary); text-shadow: 0 0 15px rgba(0,242,254,0.3); }
+  .shell {
+    width: 100%;
+    max-width: 480px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    background: var(--bg);
+  }
 
-        .page { display: none; padding: 20px; animation: slideUp 0.4s ease; flex: 1; }
-        .page.active { display: block; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  /* ── TOP BAR ── */
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 20px 10px;
+    position: sticky; top: 0; z-index: 50;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+  }
+  .topbar-logo {
+    font-family: var(--font-head);
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+  }
+  .topbar-logo span { color: var(--gold); }
+  .topbar-badge {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    padding: 7px 12px;
+    border-radius: 40px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .topbar-badge .dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--green);
+    animation: pulse-green 2s infinite;
+  }
+  @keyframes pulse-green {
+    0%,100% { opacity:1; box-shadow: 0 0 0 0 rgba(46,204,113,0.4); }
+    50% { opacity:0.8; box-shadow: 0 0 0 5px rgba(46,204,113,0); }
+  }
 
-        .card { 
-            background: var(--card-bg); padding: 30px; border-radius: 30px; 
-            text-align: center; border: 1px solid rgba(255,255,255,0.05);
-            margin-bottom: 20px; transition: 0.3s;
-        }
+  /* ── PAGES ── */
+  .pages { flex: 1; overflow: hidden; }
+  .page { display: none; padding: 16px 16px 90px; overflow-y: auto; height: calc(100vh - 130px); }
+  .page.active { display: block; }
 
-        .balance-value { 
-            font-size: 50px; font-weight: 900; margin: 10px 0;
-            background: linear-gradient(to bottom, #fff, var(--primary));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        }
+  /* ── SCROLLBAR ── */
+  .page::-webkit-scrollbar { width: 3px; }
+  .page::-webkit-scrollbar-track { background: transparent; }
+  .page::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 10px; }
 
-        .btn-watch { 
-            background: linear-gradient(45deg, var(--secondary), var(--primary));
-            color: #000; border: none; padding: 22px; border-radius: 20px;
-            font-weight: 900; font-size: 18px; width: 100%; cursor: pointer;
-            box-shadow: 0 10px 20px rgba(0,242,254,0.2); transition: 0.3s;
-        }
-        .btn-watch:active { transform: scale(0.96); }
+  /* ── CARDS ── */
+  .card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px 20px;
+    margin-bottom: 14px;
+  }
+  .card-glow {
+    background: linear-gradient(145deg, rgba(0,198,255,0.06), rgba(0,114,255,0.04));
+    border-color: rgba(0,198,255,0.15);
+  }
+  .card-gold {
+    background: linear-gradient(145deg, rgba(244,194,82,0.08), rgba(249,217,138,0.04));
+    border-color: rgba(244,194,82,0.20);
+  }
 
-        /* Navigation Bar - Responsive */
-        .bottom-nav { 
-            position: sticky; bottom: 0; width: 100%; background: #161b22; 
-            display: flex; justify-content: space-around; padding: 15px 0;
-            border-top: 1px solid #30363d;
-        }
-        .nav-item { background: none; border: none; color: #8b949e; text-align: center; cursor: pointer; flex: 1; }
-        .nav-item.active { color: var(--primary); }
-        .nav-icon { font-size: 24px; display: block; margin-bottom: 4px; }
+  /* ── BALANCE HERO ── */
+  .hero-card {
+    background: var(--bg2);
+    border: 1px solid rgba(0,198,255,0.15);
+    border-radius: var(--radius);
+    padding: 26px 22px 20px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 14px;
+  }
+  .hero-card::before {
+    content:'';
+    position: absolute; top: -60px; left: 50%; transform: translateX(-50%);
+    width: 280px; height: 180px;
+    background: radial-gradient(ellipse at center, rgba(0,198,255,0.10) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 600;
+  }
+  .hero-balance {
+    font-family: var(--font-head);
+    font-size: 56px;
+    font-weight: 800;
+    line-height: 1;
+    margin: 8px 0 4px;
+    color: var(--text);
+  }
+  .hero-balance .dec { font-size: 30px; color: var(--muted); }
+  .hero-currency {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 1.5px;
+  }
+  .hero-row {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+  }
+  .hero-stat { text-align: center; }
+  .hero-stat .val { font-family: var(--font-head); font-size: 17px; font-weight: 700; color: var(--gold); }
+  .hero-stat .lbl { font-size: 11px; color: var(--muted); margin-top: 2px; }
 
-        progress { width: 100%; height: 10px; border-radius: 10px; accent-color: var(--primary); }
-    </style>
+  /* ── WATCH BUTTON ── */
+  .btn-watch {
+    width: 100%;
+    padding: 19px;
+    border-radius: var(--radius);
+    border: none;
+    font-family: var(--font-head);
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.15s, box-shadow 0.2s;
+    background: linear-gradient(90deg, var(--accent2), var(--accent));
+    color: #fff;
+    box-shadow: 0 8px 30px rgba(0,114,255,0.30);
+  }
+  .btn-watch:active { transform: scale(0.97); box-shadow: 0 4px 15px rgba(0,114,255,0.20); }
+  .btn-watch.gold-btn {
+    background: linear-gradient(90deg, #C67C0F, var(--gold));
+    color: #1a0e00;
+    box-shadow: 0 8px 30px rgba(244,194,82,0.25);
+  }
+  .btn-watch.gold-btn:active { box-shadow: 0 4px 15px rgba(244,194,82,0.15); }
+  .btn-watch .ripple {
+    position: absolute; border-radius: 50%;
+    background: rgba(255,255,255,0.25);
+    transform: scale(0); animation: ripple 0.6s linear;
+    pointer-events: none;
+  }
+  @keyframes ripple { to { transform: scale(4); opacity: 0; } }
+
+  /* ── DAILY PROGRESS ── */
+  .prog-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .prog-title { font-size: 14px; font-weight: 600; }
+  .prog-count { font-size: 13px; font-weight: 700; color: var(--accent); }
+  .prog-bar-bg {
+    background: var(--bg4);
+    border-radius: 40px;
+    height: 8px;
+    overflow: hidden;
+  }
+  .prog-bar-fill {
+    height: 100%; border-radius: 40px;
+    background: linear-gradient(90deg, var(--accent2), var(--accent));
+    transition: width 0.5s cubic-bezier(.4,0,.2,1);
+    position: relative;
+  }
+  .prog-bar-fill::after {
+    content:'';
+    position: absolute; right: 0; top: 50%; transform: translateY(-50%);
+    width: 12px; height: 12px; border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent);
+  }
+
+  /* ── PLAN CARDS ── */
+  .plans-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .plan-card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 16px 14px;
+    cursor: pointer;
+    transition: 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .plan-card.active-plan {
+    border-color: var(--gold);
+    background: rgba(244,194,82,0.07);
+  }
+  .plan-card .plan-name { font-family: var(--font-head); font-size: 16px; font-weight: 800; }
+  .plan-card .plan-pct { font-size: 12px; color: var(--muted); margin: 3px 0; }
+  .plan-card .plan-ads { font-size: 22px; font-weight: 700; color: var(--gold); margin: 6px 0; font-family: var(--font-head); }
+  .plan-card .plan-price { font-size: 12px; color: var(--muted); }
+  .plan-card .plan-badge {
+    position: absolute; top: 10px; right: 10px;
+    background: var(--gold);
+    color: #1a0e00;
+    font-size: 9px;
+    font-weight: 700;
+    padding: 3px 7px;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+  }
+
+  /* ── SECTION HEADER ── */
+  .sec-head {
+    display: flex; align-items: center; justify-content: space-between;
+    margin: 6px 0 12px;
+  }
+  .sec-title { font-family: var(--font-head); font-size: 16px; font-weight: 700; }
+  .sec-link { font-size: 12px; color: var(--accent); font-weight: 600; cursor: pointer; }
+
+  /* ── LIVE FEED ── */
+  .live-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: rgba(231,76,60,0.15);
+    border: 1px solid rgba(231,76,60,0.3);
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--red);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .live-badge .blink { width:6px; height:6px; border-radius:50%; background:var(--red); animation: blink 1.2s infinite; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+
+  .feed-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 0;
+    border-bottom: 1px solid var(--border);
+    animation: feedIn 0.4s ease;
+  }
+  .feed-item:last-child { border-bottom: none; }
+  @keyframes feedIn { from { opacity:0; transform:translateY(-8px); } to { opacity:1; transform:translateY(0); } }
+  .feed-avatar {
+    width: 38px; height: 38px; border-radius: 50%;
+    font-family: var(--font-head);
+    font-size: 14px;
+    font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .feed-info { flex: 1; min-width: 0; }
+  .feed-name { font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .feed-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .feed-amount { font-family: var(--font-head); font-size: 15px; font-weight: 700; color: var(--green); white-space: nowrap; }
+
+  /* ── REFERRAL ── */
+  .ref-stats {
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 14px;
+  }
+  .ref-stat {
+    background: var(--bg3); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); padding: 14px 10px; text-align: center;
+  }
+  .ref-stat .rv { font-family: var(--font-head); font-size: 22px; font-weight: 800; color: var(--gold); }
+  .ref-stat .rl { font-size: 10px; color: var(--muted); margin-top: 3px; }
+
+  .ref-link-box {
+    background: var(--bg4);
+    border: 1px solid var(--border2);
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .ref-link-text { flex: 1; font-size: 13px; color: var(--accent); font-family: 'DM Mono', monospace; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .copy-btn {
+    background: var(--accent2); color: #fff;
+    border: none; border-radius: 8px; padding: 8px 14px;
+    font-size: 12px; font-weight: 700; cursor: pointer; flex-shrink: 0;
+    transition: 0.15s;
+  }
+  .copy-btn:active { transform: scale(0.95); }
+
+  /* ── LEADERBOARD ── */
+  .lb-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 0; border-bottom: 1px solid var(--border);
+  }
+  .lb-item:last-child { border-bottom: none; }
+  .lb-rank {
+    width: 28px; height: 28px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-head); font-size: 12px; font-weight: 800;
+    flex-shrink: 0;
+  }
+  .lb-rank.r1 { background: var(--gold); color: #1a0e00; }
+  .lb-rank.r2 { background: #C0C7D0; color: #1a1a1a; }
+  .lb-rank.r3 { background: #C8834A; color: #fff; }
+  .lb-rank.rn { background: var(--bg4); color: var(--muted); }
+  .lb-name { flex: 1; font-size: 14px; font-weight: 600; }
+  .lb-refs { font-size: 12px; color: var(--muted); }
+  .lb-earn { font-family: var(--font-head); font-size: 15px; font-weight: 700; color: var(--gold); }
+
+  /* ── WALLET ── */
+  .wallet-hero {
+    background: linear-gradient(145deg, rgba(46,204,113,0.08), rgba(0,198,255,0.05));
+    border: 1px solid rgba(46,204,113,0.18);
+    border-radius: var(--radius);
+    padding: 24px 22px;
+    text-align: center;
+    margin-bottom: 14px;
+  }
+  .wallet-bal { font-family: var(--font-head); font-size: 44px; font-weight: 800; }
+  .w-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+  .w-stat {
+    background: var(--bg3); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); padding: 16px 14px;
+  }
+  .w-stat .wv { font-family: var(--font-head); font-size: 20px; font-weight: 700; }
+  .w-stat .wl { font-size: 11px; color: var(--muted); margin-top: 3px; }
+
+  .btn-secondary {
+    width: 100%; padding: 16px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border2);
+    background: var(--bg3);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 15px; font-weight: 600;
+    cursor: pointer; transition: 0.2s;
+    margin-bottom: 10px;
+  }
+  .btn-secondary:active { background: var(--bg4); }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(20px);
+    background: var(--bg3); border: 1px solid var(--border2);
+    padding: 12px 22px; border-radius: 40px;
+    font-size: 14px; font-weight: 600;
+    opacity: 0; transition: 0.3s; z-index: 999;
+    white-space: nowrap;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* ── BOTTOM NAV ── */
+  .bottom-nav {
+    position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+    width: 100%; max-width: 480px;
+    background: rgba(8,11,16,0.95);
+    backdrop-filter: blur(20px);
+    border-top: 1px solid var(--border);
+    display: flex;
+    padding: 10px 0 max(10px, env(safe-area-inset-bottom));
+    z-index: 100;
+  }
+  .nav-btn {
+    flex: 1; background: none; border: none; cursor: pointer;
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+    padding: 4px 0; transition: 0.2s;
+  }
+  .nav-btn .ni {
+    font-size: 22px; line-height: 1;
+    filter: grayscale(1) opacity(0.4);
+    transition: 0.2s;
+  }
+  .nav-btn .nl {
+    font-size: 10px; font-weight: 600; color: var(--muted);
+    letter-spacing: 0.5px; transition: 0.2s;
+  }
+  .nav-btn.active .ni { filter: none; }
+  .nav-btn.active .nl { color: var(--accent); }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    display: none;
+    position: fixed; inset: 0; z-index: 200;
+    background: rgba(0,0,0,0.7);
+    align-items: flex-end; justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal-box {
+    width: 100%; max-width: 480px;
+    background: var(--bg2);
+    border-radius: 28px 28px 0 0;
+    border-top: 1px solid var(--border2);
+    padding: 24px 20px 36px;
+    animation: slideModal 0.3s ease;
+  }
+  @keyframes slideModal { from { transform: translateY(100%); } to { transform: translateY(0); } }
+  .modal-handle {
+    width: 40px; height: 4px; border-radius: 10px;
+    background: var(--border2); margin: 0 auto 20px;
+  }
+
+  /* ── FLOATING PARTICLES (decorative) ── */
+  .particles { position: fixed; top: 0; left: 50%; transform: translateX(-50%); width: 480px; height: 100vh; pointer-events: none; z-index: 0; overflow: hidden; }
+  .particle {
+    position: absolute; border-radius: 50%;
+    background: rgba(0,198,255,0.15);
+    animation: float linear infinite;
+  }
+  @keyframes float {
+    from { transform: translateY(110vh) scale(0); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 0.5; }
+    to { transform: translateY(-10vh) scale(1); opacity: 0; }
+  }
+
+  /* ── AD OVERLAY ── */
+  .ad-overlay {
+    display: none;
+    position: fixed; inset: 0; z-index: 300;
+    background: rgba(0,0,0,0.92);
+    align-items: center; justify-content: center;
+    flex-direction: column; gap: 20px;
+    text-align: center;
+  }
+  .ad-overlay.open { display: flex; }
+  .ad-circle {
+    width: 120px; height: 120px; border-radius: 50%;
+    border: 3px solid var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 48px;
+    position: relative;
+  }
+  .ad-circle svg.ring {
+    position: absolute; top: -3px; left: -3px;
+    width: 126px; height: 126px;
+    transform: rotate(-90deg);
+  }
+  .ad-circle svg.ring circle {
+    fill: none; stroke: var(--gold); stroke-width: 3;
+    stroke-dasharray: 380;
+    stroke-dashoffset: 380;
+    animation: countdown 5s linear forwards;
+    stroke-linecap: round;
+  }
+  @keyframes countdown { to { stroke-dashoffset: 0; } }
+  .ad-title { font-family: var(--font-head); font-size: 24px; font-weight: 800; }
+  .ad-sub { font-size: 14px; color: var(--muted); }
+  .ad-earn { font-family: var(--font-head); font-size: 32px; font-weight: 800; color: var(--green); }
+
+  /* ── EARN ANIMATION ── */
+  .earn-pop {
+    position: fixed; pointer-events: none; z-index: 500;
+    font-family: var(--font-head); font-size: 22px; font-weight: 800; color: var(--green);
+    animation: earnFloat 1.2s ease forwards;
+    text-shadow: 0 0 10px rgba(46,204,113,0.5);
+  }
+  @keyframes earnFloat {
+    from { opacity: 1; transform: translateY(0) scale(1); }
+    to { opacity: 0; transform: translateY(-80px) scale(1.3); }
+  }
+
+  /* ── SUBSCRIPTION PLAN MODAL STYLES ── */
+  .sub-plan {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 18px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: 0.2s;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .sub-plan:active { transform: scale(0.98); }
+  .sub-plan.highlight { border-color: var(--gold); background: rgba(244,194,82,0.06); }
+  .sub-icon { font-size: 28px; flex-shrink: 0; }
+  .sub-info { flex: 1; }
+  .sub-name { font-family: var(--font-head); font-size: 16px; font-weight: 700; }
+  .sub-desc { font-size: 12px; color: var(--muted); margin-top: 3px; }
+  .sub-price { font-family: var(--font-head); font-size: 16px; font-weight: 800; color: var(--gold); }
+
+  /* ── TICKER ── */
+  .ticker-wrap {
+    overflow: hidden; white-space: nowrap;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 8px 0;
+    margin-bottom: 14px;
+    background: var(--bg2);
+  }
+  .ticker-inner {
+    display: inline-block;
+    animation: ticker 20s linear infinite;
+    font-size: 12px; color: var(--muted); font-weight: 500;
+  }
+  .ticker-inner span { margin: 0 28px; }
+  .ticker-inner .tg { color: var(--green); }
+  .ticker-inner .tr { color: var(--red); }
+  @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* ── COUNTRY FLAG COLORS ── */
+  .flag-in { background: linear-gradient(135deg, #FF9933, #fff, #138808); }
+  .flag-us { background: linear-gradient(135deg, #002868, #BF0A30); }
+  .flag-pk { background: linear-gradient(135deg, #01411C, #fff); }
+  .flag-bd { background: linear-gradient(135deg, #006A4E, #F42A41); }
+  .flag-uk { background: linear-gradient(135deg, #012169, #C8102E); }
+  .flag-au { background: linear-gradient(135deg, #00008B, #FF0000); }
+
+  @media (min-width: 481px) {
+    body { background: #050709; }
+    .shell { border-left: 1px solid var(--border); border-right: 1px solid var(--border); }
+    .bottom-nav { border-left: 1px solid var(--border); border-right: 1px solid var(--border); }
+  }
+</style>
 </head>
 <body>
 
-<div class="app-container">
-    <div class="header">ELITE CRIC 🏏</div>
+<!-- Particles -->
+<div class="particles" id="particlesContainer"></div>
 
-    <div id="home" class="page active">
-        <div class="card">
-            <span style="letter-spacing: 2px; font-size: 12px; color: #8b949e;">TOTAL BALANCE</span>
-            <div class="balance-value" id="userBalance">0.00</div>
-            <div style="font-weight: bold; color: var(--primary);">STARS</div>
-            <button class="btn-watch" style="margin-top:20px;" onclick="runAd()">📺 WATCH & EARN</button>
-        </div>
+<!-- SHELL -->
+<div class="shell">
 
-        <div class="card" style="background: rgba(255,255,255,0.02);">
-            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                <span>Daily Task</span>
-                <span id="taskStat">0/10</span>
-            </div>
-            <progress id="pBar" value="0" max="10"></progress>
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="topbar-logo">ELITE <span>CRIC</span> 🏏</div>
+    <div class="topbar-badge">
+      <div class="dot"></div>
+      <span id="liveCount">12,847</span> Live
+    </div>
+  </div>
+
+  <!-- PAGES -->
+  <div class="pages">
+
+    <!-- ── HOME PAGE ── -->
+    <div id="page-home" class="page active">
+
+      <!-- Ticker -->
+      <div class="ticker-wrap">
+        <div class="ticker-inner" id="tickerEl">
+          <span>🇮🇳 Rahul K. withdrew <b class="tg">85 ⭐</b></span>
+          <span>🇵🇰 Ali H. earned <b class="tg">+0.06 ⭐</b></span>
+          <span>🇺🇸 John D. referred 3 friends</span>
+          <span>🇧🇩 Rahim M. withdrew <b class="tg">120 ⭐</b></span>
+          <span>🇦🇺 James W. upgraded to <b style="color:var(--gold)">PRO</b></span>
+          <span>🇮🇳 Priya S. earned <b class="tg">+0.06 ⭐</b></span>
+          <span>🇬🇧 David C. referred 8 friends</span>
+          <span>🇮🇳 Rahul K. withdrew <b class="tg">85 ⭐</b></span>
+          <span>🇵🇰 Ali H. earned <b class="tg">+0.06 ⭐</b></span>
+          <span>🇺🇸 John D. referred 3 friends</span>
+          <span>🇧🇩 Rahim M. withdrew <b class="tg">120 ⭐</b></span>
+          <span>🇦🇺 James W. upgraded to <b style="color:var(--gold)">PRO</b></span>
         </div>
+      </div>
+
+      <!-- Balance Hero -->
+      <div class="hero-card card-glow">
+        <div class="hero-label">Your Balance</div>
+        <div class="hero-balance" id="heroBalance">
+          <span id="balInt">0</span><span class="dec">.<span id="balDec">00</span></span>
+        </div>
+        <div class="hero-currency">⭐ STARS</div>
+        <div class="hero-row">
+          <div class="hero-stat">
+            <div class="val" id="totalEarned">0.00</div>
+            <div class="lbl">Total Earned</div>
+          </div>
+          <div class="hero-stat">
+            <div class="val" id="todayCount">0/10</div>
+            <div class="lbl">Today's Ads</div>
+          </div>
+          <div class="hero-stat">
+            <div class="val" id="refCount">0</div>
+            <div class="lbl">Referrals</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Watch Button -->
+      <button class="btn-watch" id="watchBtn" onclick="startAd(event)">
+        📺 &nbsp; WATCH & EARN STARS
+      </button>
+
+      <!-- Daily Progress -->
+      <div class="card" style="margin-top:14px;">
+        <div class="prog-row">
+          <div class="prog-title">Daily Task Progress</div>
+          <div class="prog-count" id="progCount">0 / 10</div>
+        </div>
+        <div class="prog-bar-bg">
+          <div class="prog-bar-fill" id="progFill" style="width:0%"></div>
+        </div>
+        <div style="margin-top:12px; display:flex; justify-content:space-between; font-size:11px; color:var(--muted);">
+          <span>+0.06 ⭐ per ad</span>
+          <span>🎯 Complete all 10 for bonus!</span>
+        </div>
+      </div>
+
+      <!-- Subscription Plans -->
+      <div class="sec-head" style="margin-top:4px;">
+        <div class="sec-title">Choose Your Plan</div>
+        <div class="sec-link" onclick="openSubModal()">See All →</div>
+      </div>
+      <div class="plans-grid">
+        <div class="plan-card active-plan" onclick="selectPlan(this, 'Free')" data-plan="Free">
+          <div class="plan-name">Free</div>
+          <div class="plan-pct">40% earnings</div>
+          <div class="plan-ads">10</div>
+          <div class="plan-price">ads/day · Free</div>
+        </div>
+        <div class="plan-card" onclick="selectPlan(this, 'Starter')" data-plan="Starter">
+          <div class="plan-name">Starter</div>
+          <div class="plan-pct">45% earnings</div>
+          <div class="plan-ads">20</div>
+          <div class="plan-price">ads/day · 50⭐/mo</div>
+        </div>
+        <div class="plan-card" onclick="selectPlan(this, 'Pro')" data-plan="Pro">
+          <div class="plan-badge">POPULAR</div>
+          <div class="plan-name" style="color:var(--gold)">Pro</div>
+          <div class="plan-pct">50% earnings</div>
+          <div class="plan-ads" style="color:var(--gold)">40</div>
+          <div class="plan-price">ads/day · 150⭐/mo</div>
+        </div>
+        <div class="plan-card" onclick="selectPlan(this, 'Elite')" data-plan="Elite">
+          <div class="plan-name" style="color:var(--accent)">Elite</div>
+          <div class="plan-pct">55% earnings</div>
+          <div class="plan-ads" style="color:var(--accent)">60</div>
+          <div class="plan-price">ads/day · 300⭐/mo</div>
+        </div>
+      </div>
+
+      <!-- Live Withdrawals -->
+      <div class="sec-head">
+        <div class="sec-title">Live Withdrawals</div>
+        <div class="live-badge"><div class="blink"></div>LIVE</div>
+      </div>
+      <div class="card" style="padding:10px 16px;">
+        <div id="liveFeed"></div>
+      </div>
+
     </div>
 
-    <div id="refer" class="page">
-        <div class="card">
-            <h2>👥 Team Earnings</h2>
-            <p>Get 10% commission when your friends watch ads!</p>
-            <div style="background: #000; padding: 15px; border-radius: 10px; font-family: monospace; margin: 20px 0;" id="refLink">
-                t.me/EliteCricBot?start=59283
-            </div>
-            <button class="btn-watch" onclick="copyRef()">🔗 COPY LINK</button>
+    <!-- ── REFER PAGE ── -->
+    <div id="page-refer" class="page">
+
+      <div class="card card-gold">
+        <div style="font-family:var(--font-head); font-size:26px; font-weight:800; margin-bottom:6px;">Invite & Earn 💸</div>
+        <div style="font-size:13px; color:var(--muted); line-height:1.6;">Earn <b style="color:var(--gold)">10% commission</b> every time your friend watches an ad. No limits on referrals!</div>
+      </div>
+
+      <!-- Ref Stats -->
+      <div class="ref-stats">
+        <div class="ref-stat">
+          <div class="rv" id="refTotal">0</div>
+          <div class="rl">Total Refs</div>
         </div>
+        <div class="ref-stat">
+          <div class="rv" id="refEarned">0.00</div>
+          <div class="rl">⭐ Earned</div>
+        </div>
+        <div class="ref-stat">
+          <div class="rv">10%</div>
+          <div class="rl">Commission</div>
+        </div>
+      </div>
+
+      <!-- Ref Link -->
+      <div class="ref-link-box">
+        <div class="ref-link-text" id="refLinkText">t.me/EliteCricBot?start=59283</div>
+        <button class="copy-btn" onclick="copyRef()">COPY</button>
+      </div>
+      <button class="btn-watch gold-btn" onclick="shareRef()">🚀 &nbsp; SHARE YOUR LINK</button>
+
+      <!-- How it works -->
+      <div class="card" style="margin-top:4px;">
+        <div class="sec-title" style="margin-bottom:14px;">How It Works</div>
+        <div style="display:flex; flex-direction:column; gap:14px;">
+          <div style="display:flex; gap:14px; align-items:center;">
+            <div style="width:36px;height:36px;border-radius:50%;background:var(--bg4);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">1</div>
+            <div><div style="font-weight:600;font-size:14px;">Share your link</div><div style="font-size:12px;color:var(--muted);">Send to friends on any platform</div></div>
+          </div>
+          <div style="display:flex; gap:14px; align-items:center;">
+            <div style="width:36px;height:36px;border-radius:50%;background:var(--bg4);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">2</div>
+            <div><div style="font-weight:600;font-size:14px;">Friend signs up & watches</div><div style="font-size:12px;color:var(--muted);">They join Elite Cric & start earning</div></div>
+          </div>
+          <div style="display:flex; gap:14px; align-items:center;">
+            <div style="width:36px;height:36px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;color:#1a0e00;">⭐</div>
+            <div><div style="font-weight:600;font-size:14px;">You earn 10% automatically</div><div style="font-size:12px;color:var(--muted);">Credited instantly to your balance</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Leaderboard -->
+      <div class="sec-head" style="margin-top:6px;">
+        <div class="sec-title">🏆 Referral Leaderboard</div>
+        <div class="live-badge"><div class="blink"></div>LIVE</div>
+      </div>
+      <div class="card" style="padding:10px 16px;">
+        <div id="leaderboardList"></div>
+      </div>
+
     </div>
 
-    <div id="wallet" class="page">
-        <div class="card">
-            <h2>👛 Wallet Info</h2>
-            <div style="text-align: left; margin: 20px 0;">
-                <p>Withdrawal Limit: <b>50 Stars</b></p>
-                <p>Pending: <b>0.00</b></p>
-            </div>
-            <button class="btn-watch" style="background: #30363d; color: #fff;">Withdraw History</button>
+    <!-- ── WALLET PAGE ── -->
+    <div id="page-wallet" class="page">
+
+      <div class="wallet-hero">
+        <div style="font-size:12px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); margin-bottom:8px;">Available Balance</div>
+        <div class="wallet-bal"><span id="walletBal">0</span> <span style="font-size:24px; color:var(--muted);">⭐</span></div>
+        <div style="font-size:12px; color:var(--muted); margin-top:6px;">Min. withdrawal: 50 ⭐</div>
+      </div>
+
+      <div class="w-grid">
+        <div class="w-stat">
+          <div class="wv" id="wTotalEarned">0.00 ⭐</div>
+          <div class="wl">Total Earned</div>
         </div>
+        <div class="w-stat">
+          <div class="wv" id="wTotalWithdrawn">0.00 ⭐</div>
+          <div class="wl">Withdrawn</div>
+        </div>
+        <div class="w-stat">
+          <div class="wv" id="wPending">0.00 ⭐</div>
+          <div class="wl">Pending</div>
+        </div>
+        <div class="w-stat">
+          <div class="wv" id="wRefEarned">0.00 ⭐</div>
+          <div class="wl">Ref. Bonus</div>
+        </div>
+      </div>
+
+      <button class="btn-watch" onclick="openWithdraw()" style="margin-bottom:10px;">💎 &nbsp; WITHDRAW NOW</button>
+      <button class="btn-secondary" onclick="showToast('📋 Transaction history coming soon!')">📋 Transaction History</button>
+      <button class="btn-secondary" onclick="showToast('🔗 Connect your Telegram wallet to withdraw!')">🔗 Connect Telegram Wallet</button>
+
+      <!-- Withdrawal Feed -->
+      <div class="sec-head" style="margin-top:4px;">
+        <div class="sec-title">Recent Withdrawals</div>
+        <div class="live-badge"><div class="blink"></div>LIVE</div>
+      </div>
+      <div class="card" style="padding:10px 16px;">
+        <div id="walletFeed"></div>
+      </div>
+
     </div>
 
-    <nav class="bottom-nav">
-        <button class="nav-item active" onclick="showPage('home')"><span class="nav-icon">💎</span>Home</button>
-        <button class="nav-item" onclick="showPage('refer')"><span class="nav-icon">🚀</span>Refer</button>
-        <button class="nav-item" onclick="showPage('wallet')"><span class="nav-icon">👛</span>Wallet</button>
-    </nav>
+  </div><!-- /pages -->
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav">
+    <button class="nav-btn active" onclick="showPage('home', this)">
+      <span class="ni">💎</span><span class="nl">HOME</span>
+    </button>
+    <button class="nav-btn" onclick="showPage('refer', this)">
+      <span class="ni">🚀</span><span class="nl">REFER</span>
+    </button>
+    <button class="nav-btn" onclick="showPage('wallet', this)">
+      <span class="ni">👛</span><span class="nl">WALLET</span>
+    </button>
+  </nav>
+
+</div><!-- /shell -->
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- AD OVERLAY -->
+<div class="ad-overlay" id="adOverlay">
+  <div style="font-size:13px; letter-spacing:2px; text-transform:uppercase; color:var(--muted);">Ad Playing</div>
+  <div class="ad-circle">
+    📺
+    <svg class="ring" viewBox="0 0 126 126">
+      <circle cx="63" cy="63" r="60" id="adRing"/>
+    </svg>
+  </div>
+  <div class="ad-title">Watch & Earn!</div>
+  <div class="ad-sub">Stay till the end to collect your reward</div>
+  <div class="ad-earn" id="adEarnAmt">+0.06 ⭐</div>
+</div>
+
+<!-- SUBSCRIPTION MODAL -->
+<div class="modal-overlay" id="subModal" onclick="closeModal('subModal')">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div style="font-family:var(--font-head); font-size:22px; font-weight:800; margin-bottom:4px;">Upgrade Your Plan</div>
+    <div style="font-size:13px; color:var(--muted); margin-bottom:20px;">Higher plan = more ads + higher earnings %</div>
+    <div class="sub-plan" onclick="subscribePlan('Free', 0)">
+      <div class="sub-icon">🆓</div>
+      <div class="sub-info">
+        <div class="sub-name">Free</div>
+        <div class="sub-desc">10 ads/day · 40% earnings · Basic</div>
+      </div>
+      <div class="sub-price">Free</div>
+    </div>
+    <div class="sub-plan" onclick="subscribePlan('Starter', 50)">
+      <div class="sub-icon">🌱</div>
+      <div class="sub-info">
+        <div class="sub-name">Starter</div>
+        <div class="sub-desc">20 ads/day · 45% earnings</div>
+      </div>
+      <div class="sub-price">50⭐/mo</div>
+    </div>
+    <div class="sub-plan highlight" onclick="subscribePlan('Pro', 150)">
+      <div class="sub-icon">⚡</div>
+      <div class="sub-info">
+        <div class="sub-name">Pro <span style="background:var(--gold);color:#1a0e00;font-size:9px;padding:2px 6px;border-radius:10px;font-weight:800;vertical-align:middle;">POPULAR</span></div>
+        <div class="sub-desc">40 ads/day · 50% earnings · +bonuses</div>
+      </div>
+      <div class="sub-price">150⭐/mo</div>
+    </div>
+    <div class="sub-plan" onclick="subscribePlan('Elite', 300)">
+      <div class="sub-icon">👑</div>
+      <div class="sub-info">
+        <div class="sub-name" style="color:var(--accent)">Elite</div>
+        <div class="sub-desc">60 ads/day · 55% earnings · Priority</div>
+      </div>
+      <div class="sub-price" style="color:var(--accent)">300⭐/mo</div>
+    </div>
+  </div>
+</div>
+
+<!-- WITHDRAW MODAL -->
+<div class="modal-overlay" id="withdrawModal" onclick="closeModal('withdrawModal')">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div style="font-family:var(--font-head); font-size:22px; font-weight:800; margin-bottom:4px;">Withdraw Stars ⭐</div>
+    <div style="font-size:13px; color:var(--muted); margin-bottom:20px;">Minimum 50 Stars · Sent via Telegram Stars</div>
+    <div style="background:var(--bg4); border-radius:var(--radius-sm); padding:16px; margin-bottom:14px;">
+      <div style="font-size:12px; color:var(--muted); margin-bottom:6px;">Available Balance</div>
+      <div style="font-family:var(--font-head); font-size:32px; font-weight:800;" id="withdrawAvail">0.00 ⭐</div>
+    </div>
+    <button class="btn-watch" onclick="doWithdraw()" style="margin-bottom:0;">💎 Confirm Withdrawal</button>
+  </div>
 </div>
 
 <script>
-    let balance = 0;
-    let adsToday = 0;
+// ── STATE ──
+let state = {
+  balance: 0,
+  totalEarned: 0,
+  adsToday: 0,
+  maxAds: 10,
+  earningPerAd: 0.06,
+  plan: 'Free',
+  refs: 0,
+  refEarned: 0,
+  totalWithdrawn: 0,
+};
 
-    function showPage(pageId) {
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.getElementById(pageId).classList.add('active');
-        document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
-        event.currentTarget.classList.add('active');
-    }
+const PLANS = {
+  Free:    { ads: 10,  pct: 0.40, earn: 0.06 },
+  Starter: { ads: 20,  pct: 0.45, earn: 0.07 },
+  Pro:     { ads: 40,  pct: 0.50, earn: 0.08 },
+  Elite:   { ads: 60,  pct: 0.55, earn: 0.09 },
+};
 
-    function runAd() {
-        // Replace 'YOUR_ZONE_ID' with real ID
-        const AdController = window.Adsgram ? window.Adsgram.init({ blockId: "YOUR_ZONE_ID" }) : null;
-        if(AdController) {
-            AdController.show().then(() => updateBalance());
-        } else {
-            updateBalance(); // Mock for testing
-        }
-    }
+const NAMES = ['Rahul K.','Ali H.','Priya S.','John D.','Rahim M.','James W.','Sara T.','Carlos M.','David C.','Aisha B.','Lucas P.','Fatima Z.','Chen W.','Amara N.','Ivan K.'];
+const FLAGS = ['🇮🇳','🇵🇰','🇺🇸','🇧🇩','🇦🇺','🇬🇧','🇧🇷','🇳🇬','🇮🇩','🇿🇦'];
+const BG_COLORS = ['#1a3a5c','#3a1a1a','#1a3a2a','#3a2a1a','#2a1a3a','#1a2a3a'];
 
-    function updateBalance() {
-        balance += 0.06;
-        adsToday++;
-        document.getElementById('userBalance').innerText = balance.toFixed(2);
-        document.getElementById('pBar').value = adsToday;
-        document.getElementById('taskStat').innerText = adsToday + "/10";
-    }
+// ── PARTICLES ──
+(function(){
+  const c = document.getElementById('particlesContainer');
+  for(let i = 0; i < 12; i++){
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const size = Math.random()*3+1;
+    p.style.cssText = `width:${size}px;height:${size}px;left:${Math.random()*100}%;animation-duration:${Math.random()*20+15}s;animation-delay:${Math.random()*20}s;`;
+    c.appendChild(p);
+  }
+})();
 
-    function copyRef() {
-        navigator.clipboard.writeText(document.getElementById('refLink').innerText);
-        alert("Link copied! 🔗");
-    }
+// ── LIVE USER COUNT ──
+(function(){
+  const el = document.getElementById('liveCount');
+  setInterval(()=>{
+    const base = 12847;
+    const v = base + Math.floor(Math.random()*200 - 100);
+    el.textContent = v.toLocaleString();
+  }, 4000);
+})();
+
+// ── LIVE FEED ──
+const liveFeedItems = [];
+function randomFeedItem(){
+  const name = FLAGS[Math.floor(Math.random()*FLAGS.length)] + ' ' + NAMES[Math.floor(Math.random()*NAMES.length)];
+  const amount = (Math.random()*200+50).toFixed(0);
+  const initials = NAMES[Math.floor(Math.random()*NAMES.length)].split(' ').map(x=>x[0]).join('');
+  const bg = BG_COLORS[Math.floor(Math.random()*BG_COLORS.length)];
+  const actions = ['withdrew','withdrew','withdrew','cashed out'];
+  const action = actions[Math.floor(Math.random()*actions.length)];
+  const mins = Math.floor(Math.random()*59+1);
+  return { name, amount, initials, bg, action, mins };
+}
+
+function renderFeed(containerId, count){
+  const el = document.getElementById(containerId);
+  const items = [];
+  for(let i=0;i<count;i++) items.push(randomFeedItem());
+  el.innerHTML = items.map(it=>`
+    <div class="feed-item">
+      <div class="feed-avatar" style="background:${it.bg};color:#fff;">${it.initials}</div>
+      <div class="feed-info">
+        <div class="feed-name">${it.name}</div>
+        <div class="feed-sub">${it.action} · ${it.mins}m ago</div>
+      </div>
+      <div class="feed-amount">+${it.amount} ⭐</div>
+    </div>`).join('');
+}
+
+function addFeedItem(containerId){
+  const el = document.getElementById(containerId);
+  const it = randomFeedItem();
+  const div = document.createElement('div');
+  div.className = 'feed-item';
+  div.innerHTML = `
+    <div class="feed-avatar" style="background:${it.bg};color:#fff;">${it.initials}</div>
+    <div class="feed-info">
+      <div class="feed-name">${it.name}</div>
+      <div class="feed-sub">${it.action} · just now</div>
+    </div>
+    <div class="feed-amount">+${it.amount} ⭐</div>`;
+  el.insertBefore(div, el.firstChild);
+  const children = el.children;
+  if(children.length > 6) el.removeChild(children[children.length-1]);
+}
+
+renderFeed('liveFeed', 5);
+renderFeed('walletFeed', 5);
+setInterval(()=>{ addFeedItem('liveFeed'); addFeedItem('walletFeed'); }, 3500);
+
+// ── LEADERBOARD ──
+const lbData = [
+  { name:'🇮🇳 Arjun M.', refs:847, earn:'423.5' },
+  { name:'🇵🇰 Zaid A.', refs:631, earn:'315.5' },
+  { name:'🇧🇩 Karim H.', refs:524, earn:'262.0' },
+  { name:'🇺🇸 Mike T.', refs:418, earn:'209.0' },
+  { name:'🇦🇺 James R.', refs:302, earn:'151.0' },
+  { name:'🇬🇧 Emma S.', refs:276, earn:'138.0' },
+  { name:'🇮🇩 Budi W.', refs:214, earn:'107.0' },
+];
+
+function renderLeaderboard(){
+  const el = document.getElementById('leaderboardList');
+  el.innerHTML = lbData.map((d,i)=>`
+    <div class="lb-item">
+      <div class="lb-rank ${i===0?'r1':i===1?'r2':i===2?'r3':'rn'}">${i+1}</div>
+      <div>
+        <div class="lb-name">${d.name}</div>
+        <div class="lb-refs" style="font-size:11px;color:var(--muted);">${d.refs} referrals</div>
+      </div>
+      <div class="lb-earn">${d.earn} ⭐</div>
+    </div>`).join('');
+}
+renderLeaderboard();
+
+// Bump leaderboard live
+setInterval(()=>{
+  lbData[0].refs += Math.floor(Math.random()*3);
+  lbData[0].earn = (parseFloat(lbData[0].earn) + 0.1*Math.floor(Math.random()*3)).toFixed(1);
+  renderLeaderboard();
+},8000);
+
+// ── AD FLOW ──
+let adRunning = false;
+function startAd(e){
+  if(adRunning) return;
+  if(state.adsToday >= state.maxAds){ showToast('✅ Daily limit reached! Upgrade for more.'); return; }
+  
+  // ripple
+  const btn = document.getElementById('watchBtn');
+  const r = document.createElement('span');
+  r.className = 'ripple';
+  const rect = btn.getBoundingClientRect();
+  const size = Math.max(rect.width, rect.height);
+  r.style.cssText = `width:${size}px;height:${size}px;left:${e.clientX-rect.left-size/2}px;top:${e.clientY-rect.top-size/2}px;`;
+  btn.appendChild(r);
+  setTimeout(()=>r.remove(), 600);
+
+  adRunning = true;
+  document.getElementById('adEarnAmt').textContent = `+${state.earningPerAd.toFixed(2)} ⭐`;
+  document.getElementById('adOverlay').classList.add('open');
+
+  // reset ring
+  const ring = document.getElementById('adRing');
+  ring.style.animation = 'none';
+  ring.getBoundingClientRect();
+  ring.style.animation = '';
+
+  setTimeout(()=>{
+    document.getElementById('adOverlay').classList.remove('open');
+    creditEarning(e);
+    adRunning = false;
+  }, 5100);
+}
+
+function creditEarning(e){
+  state.balance += state.earningPerAd;
+  state.totalEarned += state.earningPerAd;
+  state.adsToday++;
+  updateUI();
+
+  // floating +earn
+  const pop = document.createElement('div');
+  pop.className = 'earn-pop';
+  pop.textContent = `+${state.earningPerAd.toFixed(2)} ⭐`;
+  const x = window.innerWidth/2 - 40;
+  const y = window.innerHeight * 0.45;
+  pop.style.cssText = `left:${x}px; top:${y}px;`;
+  document.body.appendChild(pop);
+  setTimeout(()=>pop.remove(), 1300);
+
+  showToast(`🎉 Earned ${state.earningPerAd.toFixed(2)} ⭐ Stars!`);
+
+  // referral simulation: occasionally add a ref
+  if(Math.random()<0.1){
+    state.refs++;
+    state.refEarned += state.earningPerAd * 0.1;
+    document.getElementById('refTotal').textContent = state.refs;
+    document.getElementById('refEarned').textContent = state.refEarned.toFixed(2);
+    document.getElementById('refCount').textContent = state.refs;
+  }
+}
+
+// ── UI UPDATE ──
+function updateUI(){
+  const bal = state.balance;
+  const intPart = Math.floor(bal);
+  const decPart = (bal - intPart).toFixed(2).split('.')[1];
+  document.getElementById('balInt').textContent = intPart;
+  document.getElementById('balDec').textContent = decPart;
+  document.getElementById('heroBalance'); // trigger repaint
+  document.getElementById('totalEarned').textContent = state.totalEarned.toFixed(2);
+  document.getElementById('todayCount').textContent = `${state.adsToday}/${state.maxAds}`;
+  document.getElementById('progCount').textContent = `${state.adsToday} / ${state.maxAds}`;
+  document.getElementById('progFill').style.width = `${(state.adsToday/state.maxAds)*100}%`;
+
+  const walBal = Math.floor(bal);
+  document.getElementById('walletBal').textContent = walBal;
+  document.getElementById('withdrawAvail').textContent = `${bal.toFixed(2)} ⭐`;
+  document.getElementById('wTotalEarned').textContent = `${state.totalEarned.toFixed(2)} ⭐`;
+  document.getElementById('wTotalWithdrawn').textContent = `${state.totalWithdrawn.toFixed(2)} ⭐`;
+  document.getElementById('wPending').textContent = '0.00 ⭐';
+  document.getElementById('wRefEarned').textContent = `${state.refEarned.toFixed(2)} ⭐`;
+}
+
+// ── PLAN SELECT ──
+function selectPlan(el, plan){
+  document.querySelectorAll('.plan-card').forEach(c=>c.classList.remove('active-plan'));
+  el.classList.add('active-plan');
+  state.plan = plan;
+  state.maxAds = PLANS[plan].ads;
+  state.earningPerAd = PLANS[plan].earn;
+  document.getElementById('todayCount').textContent = `${state.adsToday}/${state.maxAds}`;
+  document.getElementById('progCount').textContent = `${state.adsToday} / ${state.maxAds}`;
+  document.getElementById('progFill').style.width = `${(state.adsToday/state.maxAds)*100}%`;
+  showToast(`✅ ${plan} plan activated!`);
+}
+
+// ── MODAL ──
+function openSubModal(){ document.getElementById('subModal').classList.add('open'); }
+function openWithdraw(){ document.getElementById('withdrawModal').classList.add('open'); }
+function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+
+function subscribePlan(plan, price){
+  closeModal('subModal');
+  state.plan = plan;
+  state.maxAds = PLANS[plan].ads;
+  state.earningPerAd = PLANS[plan].earn;
+  // sync plan cards
+  document.querySelectorAll('.plan-card').forEach(c=>{
+    if(c.dataset.plan === plan) c.classList.add('active-plan');
+    else c.classList.remove('active-plan');
+  });
+  updateUI();
+  showToast(`🎉 Subscribed to ${plan}! ${price>0?`${price}⭐/month`:''}`);
+}
+
+function doWithdraw(){
+  if(state.balance < 50){ showToast('⚠️ Need 50 ⭐ minimum to withdraw.'); closeModal('withdrawModal'); return; }
+  const amt = state.balance;
+  state.totalWithdrawn += amt;
+  state.balance = 0;
+  updateUI();
+  closeModal('withdrawModal');
+  showToast(`💎 Withdrawal of ${amt.toFixed(2)} ⭐ submitted!`);
+}
+
+// ── COPY/SHARE REF ──
+function copyRef(){
+  const txt = document.getElementById('refLinkText').textContent;
+  navigator.clipboard.writeText(txt).then(()=>showToast('🔗 Link copied!')).catch(()=>showToast('🔗 Link copied!'));
+}
+function shareRef(){
+  const txt = document.getElementById('refLinkText').textContent;
+  if(navigator.share){ navigator.share({ title:'Elite Cric Earn', text:'Join me on Elite Cric & earn Stars!', url: txt }); }
+  else { copyRef(); }
+}
+
+// ── PAGE NAV ──
+function showPage(id, btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+}
+
+// ── TOAST ──
+let toastTimer;
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>t.classList.remove('show'), 2500);
+}
+
+// ── INIT ──
+updateUI();
 </script>
-
 </body>
 </html>
