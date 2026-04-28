@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Watch & Earn Global</title>
+    <script src="https://static.adsgram.ai/js/sdk.js"></script> </head>
+<body style="background: #111; color: white; text-align: center; font-family: sans-serif;">
+    <h2>💰 User Dashboard</h2>
+    <div style="background: #222; padding: 20px; border-radius: 15px; margin: 20px;">
+        <p>Your Earnings (60% Share)</p>
+        <h1 id="balance">0.00 Stars</h1>
+    </div>
+    
+    <button onclick="showAd()" style="background: #0088cc; color: white; padding: 15px 30px; border: none; border-radius: 10px; font-size: 18px;">
+        Watch Ad to Earn
+    </button>
+
+    <script>
+        let balance = 0;
+        function showAd() {
+            // This is where we will put your AdsGram ID later
+            alert("Connecting to Ad Network...");
+            balance += 0.05; // Mock earning for now
+            document.getElementById('balance').innerText = balance.toFixed(2) + " Stars";
+        }
+    </script>
+</body>
+</html>
