@@ -1,26 +1,93 @@
-<div class="dashboard">
-  <h2>Global Earnings Dashboard</h2>
-  
-  <div class="stat-card">
-    <span>Your Balance (60% Share)</span>
-    <h1 id="userBalance">0.00 Stars</h1>
-  </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Elite Fantasy Earn</title>
+    <script src="https://static.adsgram.ai/js/sdk.js"></script>
+    <style>
+        body { background: #0f172a; color: white; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; padding-bottom: 80px; }
+        .header { padding: 20px; text-align: center; background: #1e293b; border-bottom: 1px solid #334155; }
+        .container { padding: 15px; }
+        .card { background: #1e293b; padding: 20px; border-radius: 20px; text-align: center; border: 1px solid #334155; margin-bottom: 15px; }
+        .balance-value { font-size: 32px; font-weight: bold; color: #38bdf8; margin: 10px 0; }
+        .btn-main { background: #38bdf8; color: #0f172a; border: none; padding: 18px; border-radius: 12px; font-weight: bold; font-size: 18px; width: 100%; cursor: pointer; }
+        
+        /* Bottom Navigation */
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: #1e293b; display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid #334155; }
+        .nav-item { color: #94a3b8; text-decoration: none; font-size: 12px; text-align: center; background: none; border: none; cursor: pointer; }
+        .nav-item.active { color: #38bdf8; }
+        .nav-icon { font-size: 20px; display: block; margin-bottom: 4px; }
 
-  <div class="info-grid">
-    <div>
-      <p>Ads Watched</p>
-      <b id="adCount">0</b>
-    </div>
-    <div>
-      <p>Total Revenue</p>
-      <b id="totalRevenue">$0.00</b>
-    </div>
-  </div>
+        /* Action Buttons */
+        .action-grid { display: flex; gap: 10px; margin-bottom: 15px; }
+        .btn-secondary { flex: 1; background: #334155; color: white; border: none; padding: 12px; border-radius: 10px; font-weight: 600; cursor: pointer; }
+        
+        .referral-box { background: #111827; padding: 15px; border-radius: 12px; font-size: 14px; border: 1px solid #38bdf8; }
+    </style>
+</head>
+<body>
 
-  <button class="earn-btn" onclick="showAdsGramAd()">Watch Ad to Earn</button>
-  
-  <div class="subscription-box">
-    <p>Current Tier: <b>Free</b></p>
-    <button onclick="upgradeTier()">🚀 Upgrade to Gold (75% Share)</button>
-  </div>
-</div>
+    <div class="header">
+        <strong>Elite Fantasy Bot</strong>
+    </div>
+
+    <div class="container">
+        <div class="card">
+            <div style="color: #94a3b8; font-size: 14px;">WALLET BALANCE</div>
+            <div class="balance-value" id="userBalance">0.00 Stars</div>
+            <div class="action-grid">
+                <button class="btn-secondary" onclick="alert('Minimum withdrawal: 50 Stars')">Withdraw</button>
+                <button class="btn-secondary" onclick="alert('Deposit system coming soon')">Deposit</button>
+            </div>
+            <button class="btn-main" onclick="showRealAd()">Watch Ad to Earn</button>
+        </div>
+
+        <div class="referral-box">
+            <h4 style="margin-top: 0; color: #38bdf8;">Refer & Earn 10%</h4>
+            <p>Share your link and earn 10% commission every time your friends watch an ad!</p>
+            <button onclick="copyRef()" style="width:100%; background:#0ea5e9; border:none; color:white; padding:10px; border-radius:8px;">Copy Invite Link</button>
+        </div>
+    </div>
+
+    <nav class="bottom-nav">
+        <button class="nav-item active" onclick="showPage('home')">
+            <span class="nav-icon">🏠</span>Home
+        </button>
+        <button class="nav-item" onclick="showPage('refer')">
+            <span class="nav-icon">👥</span>Refer
+        </button>
+        <button class="nav-item" onclick="showPage('wallet')">
+            <span class="nav-icon">💰</span>Wallet
+        </button>
+        <button class="nav-item" onclick="showPage('profile')">
+            <span class="nav-icon">⚙️</span>Profile
+        </button>
+    </nav>
+
+    <script>
+        let balance = 0;
+
+        function showRealAd() {
+            // Replace 'YOUR_ZONE_ID' with your ID from AdsGram.ai
+            const AdController = window.Adsgram.init({ blockId: "YOUR_ZONE_ID" });
+            
+            AdController.show().then((result) => {
+                balance += 0.06; // Add reward
+                document.getElementById('userBalance').innerText = balance.toFixed(2) + " Stars";
+                alert("Success! 0.06 Stars added.");
+            }).catch((err) => {
+                alert("Ad failed. Try again.");
+            });
+        }
+
+        function copyRef() {
+            alert("Referral Link Copied! (Simulated)");
+        }
+
+        function showPage(page) {
+            alert("Opening " + page + " page...");
+        }
+    </script>
+</body>
+</html>
